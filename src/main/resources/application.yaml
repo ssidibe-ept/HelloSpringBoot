@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: HelloSpringBoot
+  datasource:
+    username: ${DIC2_DB_USER:root}
+    password: ${DIC2_DB_PWD:passer123}
+    url: jdbc:mysql://localhost:3306/dic2_2025_2026
+  jpa:
+    hibernate:
+      ddl-auto: create
+      #ddl-auto: none ne modifie pas le schema
+      #ddl-auto: update mettre a jour les schema
+      #ddl-auto: create supprime+creation
+    show-sql: true
