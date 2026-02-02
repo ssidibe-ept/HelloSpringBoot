@@ -1,5 +1,6 @@
 package sn.edu.ept.git.dic2.HelloSpringBoot.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +16,6 @@ public class Employe extends Personne {
     private Integer id;
 
     @Column(nullable = false)
+    @JsonIgnore
     private Double salary;
 }
