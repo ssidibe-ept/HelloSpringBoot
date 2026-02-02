@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    username: cod
+    password: 12345678
+    url: jdbc:mysql://localhost:3306/test
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true

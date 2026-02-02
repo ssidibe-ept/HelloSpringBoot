@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import sn.edu.ept.git.dic2.HelloSpringBoot.entities.Employe;
+import sn.edu.ept.git.dic2.HelloSpringBoot.exceptions.ApiException;
 import sn.edu.ept.git.dic2.HelloSpringBoot.services.EmployeService;
 
 import java.util.Collection;
@@ -21,20 +22,20 @@ public class EmployeController {
 
     private final EmployeService employeService;
 
-    public EmployeController(EmployeService employeService){
+    public EmployeController(EmployeService employeService) {
         this.employeService = employeService;
     }
 
     @GetMapping
-    public List<Employe> findAll(Authentication authentication){
+    public List<Employe> findAll(Authentication authentication) {
 
         // Véfifier si le user s'est connecté
-        if(authentication == null){
+        if (authentication == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         Object principal = authentication.getPrincipal();
-        if(principal instanceof Employe){
+        if (principal instanceof Employe) {
             Employe employe = (Employe) principal;
             log.info("Nom Employé={}", employe.getPrenom());
         } else {
@@ -47,7 +48,7 @@ public class EmployeController {
         // Récupération des roles
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        for(GrantedAuthority grantedAuthority : authorities){
+        for (GrantedAuthority grantedAuthority : authorities) {
             log.info("Droits={}", grantedAuthority.getAuthority());
         }
 
@@ -62,15 +63,13 @@ public class EmployeController {
     }
 
     @GetMapping("/{id}")
-    public Employe findById(@PathVariable(name = "id") Integer idEmploye){
+    public Employe findById(@PathVariable(name = "id") Integer idEmploye) {
         return employeService.findById(idEmploye);
     }
 
     @PutMapping
-    public ResponseEntity<Employe> save(@RequestBody Employe employe){
-        if (employe.getNom() == null || employe.getNom().isBlank()){
-            return ResponseEntity.status(451).build();
-        }
+    public ResponseEntity<?> save(@RequestBody Employe employe) {
+
         Employe result = employeService.save(employe);
 
         return ResponseEntity.status(201)
@@ -78,10 +77,11 @@ public class EmployeController {
     }
 
     @PutMapping("/{id}")
-    public Employe update(
+    public ResponseEntity<?> update(
             @PathVariable(name = "id") Integer id,
-            @RequestBody Employe employe){
-        return employeService.save(employe);
+            @RequestBody Employe employe) {
+            return ResponseEntity.status(201).body(employeService.save(employe));
+
     }
 
 }
